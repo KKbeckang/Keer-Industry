@@ -13,20 +13,35 @@ export interface Category {
 
 export interface Product {
   id: string;
-  slug: string;
-  name: string;
-  categoryId: string;
-  categoryName: string;
-  description: string;
-  fullDescription: string;
-  features: string[];
-  images: string[];
-  specs: Record<string, string>;
+  sku: string;
+  name_zh: string; // Mapped to name
+  name_en: string;
+  categoryId: string; // Mapped from category_id
+  categoryName: string; // Derived
+  short_zh: string; // Mapped to description
+  fullDescription: string; // Placeholder or extended
+  highlights_zh: string[]; // Mapped to features
+  tags_zh: string[];
+  image: {
+    cover: string | null;
+    gallery: string[];
+  };
+  specs_summary: Record<string, string | null>;
   downloads: {
     title: string;
     url: string;
     type: "PDF" | "CAD" | "ZIP";
   }[];
+  status: "active" | "inactive";
+  sort: number;
+  
+  // Computed/Legacy fields for compatibility
+  slug: string;
+  name: string;
+  description: string;
+  features: string[];
+  images: string[];
+  specs: Record<string, string>;
   isNew?: boolean;
   isHot?: boolean;
 }
@@ -85,125 +100,386 @@ export const categories: Category[] = [
   }
 ];
 
-// Products Data (Sampled & Mapped)
-export const products: Product[] = [
-  // 1. Energy & Power Monitoring
+// Raw Product Data from JSON
+const rawProducts = [
   {
-    id: "pm-001",
-    slug: "kp-3000-power-analyzer",
-    name: "KP-3000 三相功率分析仪",
-    categoryId: "power-monitoring",
-    categoryName: "能耗与电能质量监测",
-    description: "用于能效分析和电能质量监测的高精度仪器。",
-    fullDescription: "KP-3000 提供全面的电力参数测量，包括电压、电流、功率、功率因数、谐波等。是电机测试、变频器效率评估及新能源领域的理想选择。",
-    features: [
-      "0.05% 功率测量精度",
-      "带宽 DC, 0.5Hz ~ 100kHz",
-      "50次谐波分析",
-      "7英寸彩色触摸屏",
-    ],
-    images: ["/images/placeholder-analyzer.jpg"],
-    specs: {
-      "电压输入": "1000V rms",
-      "电流输入": "50A rms (直接输入)",
-      "采样率": "200 kS/s",
-      "通道数": "3V / 3A",
-    },
-    downloads: [],
+    "id": "keer-306a",
+    "sku": "KEER-306A",
+    "name_zh": "三相电力参数测试仪",
+    "name_en": "Three-Phase Power Parameter Tester",
+    "category_id": "power-monitoring",
+    "short_zh": "用于三相电力参数的现场测试与记录。",
+    "highlights_zh": ["三相测量", "现场测试", "参数记录"],
+    "tags_zh": ["电参量", "能耗监测"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 10
+  },
+  {
+    "id": "keer-306b",
+    "sku": "KEER-306B",
+    "name_zh": "三相节电监测仪",
+    "name_en": "Three-Phase Energy-Saving Monitor",
+    "category_id": "power-monitoring",
+    "short_zh": "用于三相用电与节电效果的监测与评估。",
+    "highlights_zh": ["节电监测", "三相测量", "现场评估"],
+    "tags_zh": ["节电", "能耗监测"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 20
+  },
+  {
+    "id": "keer-306c",
+    "sku": "KEER-306C",
+    "name_zh": "三相电力能耗监测仪",
+    "name_en": "Three-Phase Energy Consumption Monitor",
+    "category_id": "power-monitoring",
+    "short_zh": "用于三相能耗数据的监测、记录与分析。",
+    "highlights_zh": ["能耗统计", "数据记录", "趋势分析"],
+    "tags_zh": ["能耗", "监测"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 30
   },
 
-  // 2. Inspection & Anti-theft
   {
-    id: "ins-001",
-    slug: "ki-500-inspection-tool",
-    name: "KI-500 用电稽查仪",
-    categoryId: "inspection-anti-theft",
-    categoryName: "用电检查与反窃电检测",
-    description: "手持式多功能用电检查终端，支持多种窃电模式识别。",
-    fullDescription: "KI-500 专为反窃电工作设计，能够实时分析计量回路的电压、电流、相位及波形，内置多种窃电模型算法，自动报警异常情况。",
-    features: [
-      "自动识别接线错误",
-      "向量图实时显示",
-      "大容量数据存储",
-      "支持无线数据上传",
-    ],
-    images: [],
-    specs: {
-      "电压量程": "0-480V",
-      "电流量程": "0-10A (钳形互感器)",
-      "相位测量精度": "0.1°",
-      "工作时间": ">8小时",
-    },
-    downloads: [],
-    isHot: true,
+    "id": "keer-6510",
+    "sku": "KEER-6510",
+    "name_zh": "电力计量装置现场测试仪（单相）",
+    "name_en": "On-site Metering Device Tester (Single-Phase)",
+    "category_id": "inspection-anti-theft",
+    "short_zh": "用于单相电力计量装置的现场测试与核查。",
+    "highlights_zh": ["单相测试", "现场核查", "计量检测"],
+    "tags_zh": ["用电检查", "计量"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 110
+  },
+  {
+    "id": "keer-6511",
+    "sku": "KEER-6511",
+    "name_zh": "电力计量装置现场测试仪（单相）",
+    "name_en": "On-site Metering Device Tester (Single-Phase)",
+    "category_id": "inspection-anti-theft",
+    "short_zh": "用于单相电力计量装置的现场测试与核查。",
+    "highlights_zh": ["单相测试", "现场核查", "计量检测"],
+    "tags_zh": ["用电检查", "计量"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 120
+  },
+  {
+    "id": "keer-311a",
+    "sku": "KEER-311A",
+    "name_zh": "三相电能表现场测试仪（三相）",
+    "name_en": "Three-Phase Energy Meter Field Tester",
+    "category_id": "inspection-anti-theft",
+    "short_zh": "用于三相电能表与计量回路的现场测试。",
+    "highlights_zh": ["三相测试", "现场检测", "计量核查"],
+    "tags_zh": ["电能表", "用电检查"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 130
+  },
+  {
+    "id": "keer-312a",
+    "sku": "KEER-312A",
+    "name_zh": "三相全功能用电检查仪（三相）",
+    "name_en": "Three-Phase Full-Function Power Inspection Instrument",
+    "category_id": "inspection-anti-theft",
+    "short_zh": "用于三相用电现场检查与异常排查。",
+    "highlights_zh": ["全功能检查", "三相测量", "异常排查"],
+    "tags_zh": ["用电检查", "巡检"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 140
+  },
+  {
+    "id": "keer-313a",
+    "sku": "KEER-313A",
+    "name_zh": "三相全功能查窃电仪（三相）",
+    "name_en": "Three-Phase Anti-theft Detection Instrument",
+    "category_id": "inspection-anti-theft",
+    "short_zh": "用于三相现场查窃电与异常用电检测。",
+    "highlights_zh": ["查窃电", "异常检测", "三相巡检"],
+    "tags_zh": ["反窃电", "用电检查"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "100/220/380/1140/6600V(可选)", "current_range": "5/200/500A(可选)" },
+    "downloads": [],
+    "status": "active",
+    "sort": 150
   },
 
-  // 3. High-Voltage Safe Measurement
   {
-    id: "hv-001",
-    slug: "khv-2000-optical-probe",
-    name: "KHV-2000 光电隔离高压探头",
-    categoryId: "hv-optical-isolation",
-    categoryName: "高压安全测量",
-    description: "利用光纤传输信号，实现高低压完全隔离。",
-    fullDescription: "KHV-2000 采用光纤传输技术，将高压侧的测量信号通过光纤传输至低压侧显示仪表，彻底解决了高压测量的绝缘与干扰问题，保障操作人员绝对安全。",
-    features: [
-      "绝缘等级 110kV",
-      "抗强电磁干扰",
-      "光纤传输距离可达 100m",
-      "电池供电，方便携带",
-    ],
-    images: [],
-    specs: {
-      "测量电压": "0-35kV AC",
-      "频率响应": "10Hz - 1kHz",
-      "传输方式": "光纤",
-      "隔离耐压": "100kV/1min",
-    },
-    downloads: [],
-    isNew: true,
+    "id": "keer-pt03v-10kv",
+    "sku": "KEER-PT03V/10KV",
+    "name_zh": "高压电压互感器现场测试仪（光电隔离）",
+    "name_en": "HV Voltage Transformer Field Tester (Optical Isolation)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "光电隔离方案，面向10kV高压电压互感器现场测试。",
+    "highlights_zh": ["光电隔离", "带电测试", "10kV场景"],
+    "tags_zh": ["光电隔离", "高压测量"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 210
+  },
+  {
+    "id": "keer-ct03a-10kv",
+    "sku": "KEER-CT03A/10KV",
+    "name_zh": "高压电流互感器现场测试仪（光电隔离）",
+    "name_en": "HV Current Transformer Field Tester (Optical Isolation)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "光电隔离方案，面向10kV高压电流互感器现场测试。",
+    "highlights_zh": ["光电隔离", "带电测试", "10kV场景"],
+    "tags_zh": ["光电隔离", "高压测量"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 220
+  },
+  {
+    "id": "keer-15001g",
+    "sku": "KEER-15001G",
+    "name_zh": "高低压计量装置现场检测仪（单相）",
+    "name_en": "HV/LV Metering Device Field Inspector (Single-Phase)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于高低压计量装置的现场检测与管理（单相）。",
+    "highlights_zh": ["计量检测", "现场管理", "单相"],
+    "tags_zh": ["计量", "高低压"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": null, "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 230
+  },
+  {
+    "id": "keer-303g-10kv",
+    "sku": "KEER-303G/10KV",
+    "name_zh": "高低压计量装置现场测试管理仪（三相四线）",
+    "name_en": "HV/LV Metering Test Manager (3P4W)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于10kV高低压计量装置现场测试与管理（三相四线）。",
+    "highlights_zh": ["三相四线", "现场管理", "10kV场景"],
+    "tags_zh": ["计量", "高低压", "10kV"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 240
   },
 
-  // 4. Fault Detection
   {
-    id: "fd-001",
-    slug: "kfd-800-cable-locator",
-    name: "KFD-800 智能电缆故障定位仪",
-    categoryId: "fault-ndt",
-    categoryName: "故障定位与无损检测",
-    description: "集测距、定点、路径探测于一体的综合电缆故障测试系统。",
-    fullDescription: "KFD-800 采用多次脉冲法技术，自动分析故障距离，配合高灵敏度定点仪，可快速精确定位高阻、低阻及闪络性故障。",
-    features: [
-      "多次脉冲法技术",
-      "12英寸高亮触摸屏",
-      "自动测距功能",
-      "高能高压发生器配合",
-    ],
-    images: [],
-    specs: {
-      "测试距离": "30km",
-      "定位精度": "±0.2m",
-      "输出电压": "32kV (冲击)",
-      "供电方式": "内置锂电池/AC220V",
-    },
-    downloads: [],
+    "id": "keer-1140v-hv-voltage",
+    "sku": "KEER-1140V",
+    "name_zh": "高压电压测试仪（1140V）",
+    "name_en": "High-Voltage Voltage Tester (1140V)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于1140V高压电压参数的现场测试。",
+    "highlights_zh": ["高压测量", "现场测试", "安全作业"],
+    "tags_zh": ["高压电压", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "1140V", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 310
   },
-  
-  // Reuse some existing mock data assigned to new categories if fit, otherwise keep as filler or remove
   {
-    id: "m-001",
-    slug: "km-800-multimeter",
-    name: "KM-800 工业级真有效值万用表",
-    categoryId: "services", // Temporarily assigned here or move to a general category if needed
-    categoryName: "技术服务与解决方案", // Or create a "General Instruments" category
-    description: "坚固耐用，IP67 防护，专为恶劣工业现场设计。",
-    fullDescription: "KM-800 旨在设定恶劣环境下使用的工业万用表新标准。具有 IP67 防水防尘等级，和 3 米跌落测试。",
-    features: ["真有效值", "IP67 防水", "3米防跌落"],
-    images: ["/images/placeholder-multimeter.jpg"],
-    specs: { "DC 电压": "1000V" },
-    downloads: [],
+    "id": "keer-6kv-hv-voltage",
+    "sku": "KEER-6KV",
+    "name_zh": "高压电压测试仪（6kV）",
+    "name_en": "High-Voltage Voltage Tester (6kV)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于6kV高压电压参数的现场测试。",
+    "highlights_zh": ["高压测量", "现场测试", "安全作业"],
+    "tags_zh": ["高压电压", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "6kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 320
+  },
+  {
+    "id": "keer-10kv-hv-voltage",
+    "sku": "KEER-10KV",
+    "name_zh": "高压电压测试仪（10kV）",
+    "name_en": "High-Voltage Voltage Tester (10kV)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于10kV高压电压参数的现场测试。",
+    "highlights_zh": ["高压测量", "现场测试", "安全作业"],
+    "tags_zh": ["高压电压", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 330
+  },
+  {
+    "id": "keer-40kv-hv-voltage",
+    "sku": "KEER-40KV",
+    "name_zh": "高压电压测试仪（40kV）",
+    "name_en": "High-Voltage Voltage Tester (40kV)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于40kV高压电压参数的现场测试。",
+    "highlights_zh": ["高压测量", "现场测试", "安全作业"],
+    "tags_zh": ["高压电压", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "40kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 340
+  },
+
+  {
+    "id": "keer-1140v-50-100a-hv-current",
+    "sku": "KEER-1140V/50/100A",
+    "name_zh": "高压电流测试仪（1140V / 50/100A）",
+    "name_en": "High-Voltage Current Tester (1140V / 50/100A)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于1140V场景下高压电流参数测试（50/100A）。",
+    "highlights_zh": ["高压电流", "现场测试", "安全作业"],
+    "tags_zh": ["高压电流", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "1140V", "current_range": "50/100A" },
+    "downloads": [],
+    "status": "active",
+    "sort": 410
+  },
+  {
+    "id": "keer-6kv-50-100a-hv-current",
+    "sku": "KEER-6KV/50/100A",
+    "name_zh": "高压电流测试仪（6kV / 50/100A）",
+    "name_en": "High-Voltage Current Tester (6kV / 50/100A)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于6kV场景下高压电流参数测试（50/100A）。",
+    "highlights_zh": ["高压电流", "现场测试", "安全作业"],
+    "tags_zh": ["高压电流", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "6kV", "current_range": "50/100A" },
+    "downloads": [],
+    "status": "active",
+    "sort": 420
+  },
+  {
+    "id": "keer-10kv-50-100a-hv-current",
+    "sku": "KEER-10KV/50/100A",
+    "name_zh": "高压电流测试仪（10kV / 50/100A）",
+    "name_en": "High-Voltage Current Tester (10kV / 50/100A)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于10kV场景下高压电流参数测试（50/100A）。",
+    "highlights_zh": ["高压电流", "现场测试", "安全作业"],
+    "tags_zh": ["高压电流", "光电隔离"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": "50/100A" },
+    "downloads": [],
+    "status": "active",
+    "sort": 430
+  },
+
+  {
+    "id": "keer-15000g-10kv",
+    "sku": "KEER-15000G/10KV",
+    "name_zh": "高低压电力参数测试仪（10kV）",
+    "name_en": "HV/LV Power Parameter Tester (10kV)",
+    "category_id": "hv-optical-isolation",
+    "short_zh": "用于10kV高低压电力参数的现场测试与记录。",
+    "highlights_zh": ["高低压测量", "参数测试", "现场记录"],
+    "tags_zh": ["电参量", "高低压", "10kV"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": { "voltage_range": "10kV", "current_range": null },
+    "downloads": [],
+    "status": "active",
+    "sort": 510
+  },
+
+  {
+    "id": "keer-106b",
+    "sku": "KEER-106B",
+    "name_zh": "高低压电力设备故障探测仪",
+    "name_en": "HV/LV Power Equipment Fault Detector",
+    "category_id": "fault-ndt",
+    "short_zh": "用于电力设备运行故障的探测与定位。",
+    "highlights_zh": ["故障探测", "隐患排查", "现场定位"],
+    "tags_zh": ["故障定位", "无损检测"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": {},
+    "downloads": [],
+    "status": "active",
+    "sort": 610
+  },
+  {
+    "id": "keer-cwt160",
+    "sku": "KEER-CWT160",
+    "name_zh": "电力专用热成像仪",
+    "name_en": "Thermal Imager for Power Applications",
+    "category_id": "fault-ndt",
+    "short_zh": "用于电力设备温升检测与过热点隐患排查。",
+    "highlights_zh": ["热成像", "隐患排查", "巡检维护"],
+    "tags_zh": ["热成像", "巡检"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": {},
+    "downloads": [],
+    "status": "active",
+    "sort": 620
+  },
+  {
+    "id": "keer-007a",
+    "sku": "KEER-007A",
+    "name_zh": "电力专用电缆故障寻踪定位仪",
+    "name_en": "Power Cable Fault Tracing & Locator",
+    "category_id": "fault-ndt",
+    "short_zh": "用于电缆故障寻踪与定位，提高检修效率。",
+    "highlights_zh": ["电缆寻踪", "故障定位", "检修提效"],
+    "tags_zh": ["电缆", "故障定位"],
+    "image": { "cover": null, "gallery": [] },
+    "specs_summary": {},
+    "downloads": [],
+    "status": "active",
+    "sort": 630
   }
 ];
+
+// Map raw products to Schema
+export const products: Product[] = rawProducts.map((p) => {
+  const category = categories.find(c => c.id === p.category_id);
+  const specMap: Record<string, string> = {};
+  
+  if (p.specs_summary) {
+    Object.entries(p.specs_summary).forEach(([key, value]) => {
+      if (value) specMap[key] = value;
+    });
+  }
+
+  return {
+    ...p,
+    categoryId: p.category_id,
+    categoryName: category?.name_zh || "Unknown Category",
+    fullDescription: p.short_zh, // Use short description as placeholder
+    slug: p.id,
+    name: p.name_zh,
+    description: p.short_zh,
+    features: p.highlights_zh,
+    images: [],
+    specs: specMap,
+    status: p.status as "active" | "inactive",
+  };
+});
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
