@@ -550,8 +550,16 @@ export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
 
-export function getProductsByCategory(categoryId: string): Product[] {
+// Helper to get products or services based on category type
+export function getItemsByCategory(categoryId: string): (Product | Service)[] {
+  if (categoryId === "services") {
+    return services.sort((a, b) => a.sort - b.sort);
+  }
   return products.filter((p) => p.categoryId === categoryId);
+}
+
+export function getAllItems(): (Product | Service)[] {
+  return [...products, ...services];
 }
 
 export function getServices(): Service[] {
