@@ -1,3 +1,13 @@
+// Type Definition
+export interface Category {
+  id: string;
+  name: string;             // Chinese Name
+  englishName: string;      // English Name
+  description: string;      // Problem-oriented description
+  keyCapabilities: string[]; // Key capability tags
+  image?: string;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -18,145 +28,54 @@ export interface Product {
   isHot?: boolean;
 }
 
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  image?: string;
-}
-
+// Categories Data
 export const categories: Category[] = [
   {
-    id: "sensors",
-    name: "工业传感器",
-    description: "高精度压力、温度及流量传感器，适用于严苛的工业过程控制环境。",
+    id: "power-monitoring",
+    name: "能耗与电能质量监测",
+    englishName: "Energy & Power Monitoring",
+    description: "帮助工程师实时监测工厂与建筑的能耗状况，分析电能质量问题，提升能源效率并降低运营成本。",
+    keyCapabilities: ["谐波分析", "能效评估", "实时监测", "数据记录"],
   },
   {
-    id: "measurement",
-    name: "电力测量仪器",
-    description: "专业的电力分析与测试工具，保障电力系统的安全与效率。",
+    id: "inspection",
+    name: "用电检查与反窃电检测",
+    englishName: "Inspection & Anti-theft Measurement",
+    description: "专为电力稽查设计，快速识别异常用电行为，准确定位窃电点，保障电力资产安全。",
+    keyCapabilities: ["反窃电", "高精度采样", "便携式设计", "现场取证"],
   },
   {
-    id: "environmental",
-    name: "环境测试设备",
-    description: "精准监测温度、湿度、空气质量等环境参数。",
+    id: "hv-safe",
+    name: "高压安全测量（光电隔离技术）",
+    englishName: "High-Voltage Safe Measurement",
+    description: "采用先进的光电隔离技术，确保在高压环境下进行安全、精准的带电测试，保护人员安全。",
+    keyCapabilities: ["光电隔离", "高压安全", "带电测试", "远程遥测"],
+  },
+  {
+    id: "fault-detection",
+    name: "故障定位与无损检测",
+    englishName: "Fault Detection & Non-Destructive Testing",
+    description: "快速定位电缆及设备故障点，提供无损检测方案，缩短停机时间，维护设备健康。",
+    keyCapabilities: ["故障定位", "无损检测", "局部放电", "红外热像"],
+  },
+  {
+    id: "services",
+    name: "技术服务与解决方案",
+    englishName: "Services & Solutions",
+    description: "提供从选型咨询、系统集成到售后维护的一站式专业技术服务。",
+    keyCapabilities: ["系统集成", "定制开发", "现场服务", "培训咨询"],
   },
 ];
 
+// Products Data (Sampled & Mapped)
 export const products: Product[] = [
-  // --- Sensors ---
+  // 1. Energy & Power Monitoring
   {
-    id: "s-001",
-    slug: "kp-100-pressure-sensor",
-    name: "KP-100 高精度压力传感器",
-    categoryId: "sensors",
-    categoryName: "工业传感器",
-    description: "专为液压系统设计的紧凑型压力传感器，具有卓越的抗冲击性能。",
-    fullDescription: "KP-100 系列压力传感器采用先进的压阻式硅技术，提供从 -0.1 MPa 到 100 MPa 的宽测量范围。其全不锈钢结构确保了在恶劣工业环境中的长期稳定性，特别适用于液压站、注塑机及工程机械。",
-    features: [
-      "精度高达 ±0.25% F.S.",
-      "全不锈钢 316L 隔离膜片",
-      "抗过载能力强，可达 200%",
-      "多种输出信号可选 (4-20mA, 0-10V)",
-    ],
-    images: ["/images/placeholder-sensor.jpg"],
-    specs: {
-      "测量范围": "0 ~ 100 MPa",
-      "精度": "±0.25% F.S.",
-      "输出信号": "4-20mA / 0-10V / RS485",
-      "工作温度": "-40°C ~ +125°C",
-      "防护等级": "IP67",
-      "过程连接": "G1/4, 1/4NPT, M20x1.5",
-    },
-    downloads: [
-      { title: "KP-100 数据手册", url: "/downloads/kp-100-datasheet.pdf", type: "PDF" },
-      { title: "KP-100 安装指南", url: "/downloads/kp-100-manual.pdf", type: "PDF" },
-    ],
-    isHot: true,
-  },
-  {
-    id: "s-002",
-    slug: "kt-500-temp-transmitter",
-    name: "KT-500 智能温度变送器",
-    categoryId: "sensors",
-    categoryName: "工业传感器",
-    description: "带现场显示的智能温度变送器，支持 HART 协议。",
-    fullDescription: "KT-500 是一款高性能智能温度变送器，集成了高精度 A/D 转换与微处理器技术。它不仅能将热电阻或热电偶信号转换为标准模拟信号，还支持 HART 通讯协议，方便远程组态与诊断。",
-    features: [
-      "支持 PT100, K, J, E 等多种传感器输入",
-      "带背光 LCD 现场显示",
-      "HART 协议通讯",
-      "本安防爆认证 (Ex ia IIC T6)",
-    ],
-    images: ["/images/placeholder-temp.jpg"],
-    specs: {
-      "输入类型": "RTD / TC / Ohm / mV",
-      "输出": "4-20mA + HART",
-      "精度": "±0.1°C (RTD)",
-      "显示": "5位 LCD 带背光",
-      "供电电压": "12 ~ 36 VDC",
-    },
-    downloads: [
-      { title: "KT-500 选型手册", url: "#", type: "PDF" },
-    ],
-  },
-  {
-    id: "s-003",
-    slug: "kf-200-flow-meter",
-    name: "KF-200 电磁流量计",
-    categoryId: "sensors",
-    categoryName: "工业传感器",
-    description: "适用于导电液体的流量测量，无压损，高稳定性。",
-    fullDescription: "KF-200 电磁流量计适用于测量封闭管道中导电液体和浆液的体积流量。广泛应用于化工、环保、冶金、医药、造纸、给排水等行业。",
-    features: [
-      "测量不受流体密度、粘度、温度、压力和电导率变化的影响",
-      "测量管内无阻流部件，无压损",
-      "量程比宽，可达 1:20",
-    ],
-    images: ["/images/placeholder-flow.jpg"],
-    specs: {
-      "口径": "DN10 ~ DN2000",
-      "电极材料": "316L / 钛 / 钽 / 哈氏合金",
-      "衬里材料": "橡胶 / PTFE / PFA",
-      "精度": "±0.5%",
-    },
-    downloads: [],
-  },
-  
-  // --- Measurement Instruments ---
-  {
-    id: "m-001",
-    slug: "km-800-multimeter",
-    name: "KM-800 工业级真有效值万用表",
-    categoryId: "measurement",
-    categoryName: "电力测量仪器",
-    description: "坚固耐用，IP67 防护，专为恶劣工业现场设计。",
-    fullDescription: "KM-800 旨在设定恶劣环境下使用的工业万用表新标准。具有 IP67 防水防尘等级，并通过 3 米跌落测试。它可以测量高达 1000V 的电压和 20A 的电流。",
-    features: [
-      "真有效值 (True RMS) 测量",
-      "IP67 防水防尘",
-      "3米防跌落",
-      "内置温度测量功能",
-    ],
-    images: ["/images/placeholder-multimeter.jpg"],
-    specs: {
-      "DC 电压": "1000V",
-      "AC 电压": "1000V",
-      "DC 电流": "10A (20A for 30s)",
-      "电阻": "50 MΩ",
-      "安全等级": "CAT IV 600V / CAT III 1000V",
-    },
-    downloads: [
-      { title: "KM-800 说明书", url: "#", type: "PDF" },
-    ],
-    isNew: true,
-  },
-  {
-    id: "m-002",
+    id: "pm-001",
     slug: "kp-3000-power-analyzer",
     name: "KP-3000 三相功率分析仪",
-    categoryId: "measurement",
-    categoryName: "电力测量仪器",
+    categoryId: "power-monitoring",
+    categoryName: "能耗与电能质量监测",
     description: "用于能效分析和电能质量监测的高精度仪器。",
     fullDescription: "KP-3000 提供全面的电力参数测量，包括电压、电流、功率、功率因数、谐波等。是电机测试、变频器效率评估及新能源领域的理想选择。",
     features: [
@@ -174,74 +93,96 @@ export const products: Product[] = [
     },
     downloads: [],
   },
+
+  // 2. Inspection & Anti-theft
   {
-    id: "m-003",
-    slug: "kc-200-clamp-meter",
-    name: "KC-200 交直流钳形表",
-    categoryId: "measurement",
-    categoryName: "电力测量仪器",
-    description: "小巧便携，支持大电流非接触测量。",
-    fullDescription: "KC-200 是一款紧凑型交直流钳形表，钳口开口达 40mm，可轻松夹住粗电缆。具备浪涌电流测量功能，可捕捉电机启动电流。",
+    id: "ins-001",
+    slug: "ki-500-inspection-tool",
+    name: "KI-500 用电稽查仪",
+    categoryId: "inspection",
+    categoryName: "用电检查与反窃电检测",
+    description: "手持式多功能用电检查终端，支持多种窃电模式识别。",
+    fullDescription: "KI-500 专为反窃电工作设计，能够实时分析计量回路的电压、电流、相位及波形，内置多种窃电模型算法，自动报警异常情况。",
     features: [
-      "600A AC/DC 量程",
-      "浪涌电流捕捉",
-      "非接触电压检测 (NCV)",
+      "自动识别接线错误",
+      "向量图实时显示",
+      "大容量数据存储",
+      "支持无线数据上传",
     ],
     images: [],
     specs: {
-      "AC 电流": "600A",
-      "DC 电流": "600A",
-      "钳口开口": "40mm",
+      "电压量程": "0-480V",
+      "电流量程": "0-10A (钳形互感器)",
+      "相位测量精度": "0.1°",
+      "工作时间": ">8小时",
+    },
+    downloads: [],
+    isHot: true,
+  },
+
+  // 3. High-Voltage Safe Measurement
+  {
+    id: "hv-001",
+    slug: "khv-2000-optical-probe",
+    name: "KHV-2000 光电隔离高压探头",
+    categoryId: "hv-safe",
+    categoryName: "高压安全测量",
+    description: "利用光纤传输信号，实现高低压完全隔离。",
+    fullDescription: "KHV-2000 采用光纤传输技术，将高压侧的测量信号通过光纤传输至低压侧显示仪表，彻底解决了高压测量的绝缘与干扰问题，保障操作人员绝对安全。",
+    features: [
+      "绝缘等级 110kV",
+      "抗强电磁干扰",
+      "光纤传输距离可达 100m",
+      "电池供电，方便携带",
+    ],
+    images: [],
+    specs: {
+      "测量电压": "0-35kV AC",
+      "频率响应": "10Hz - 1kHz",
+      "传输方式": "光纤",
+      "隔离耐压": "100kV/1min",
+    },
+    downloads: [],
+    isNew: true,
+  },
+
+  // 4. Fault Detection
+  {
+    id: "fd-001",
+    slug: "kfd-800-cable-locator",
+    name: "KFD-800 智能电缆故障定位仪",
+    categoryId: "fault-detection",
+    categoryName: "故障定位与无损检测",
+    description: "集测距、定点、路径探测于一体的综合电缆故障测试系统。",
+    fullDescription: "KFD-800 采用多次脉冲法技术，自动分析故障距离，配合高灵敏度定点仪，可快速精确定位高阻、低阻及闪络性故障。",
+    features: [
+      "多次脉冲法技术",
+      "12英寸高亮触摸屏",
+      "自动测距功能",
+      "高能高压发生器配合",
+    ],
+    images: [],
+    specs: {
+      "测试距离": "30km",
+      "定位精度": "±0.2m",
+      "输出电压": "32kV (冲击)",
+      "供电方式": "内置锂电池/AC220V",
     },
     downloads: [],
   },
-
-  // --- Environmental ---
+  
+  // Reuse some existing mock data assigned to new categories if fit, otherwise keep as filler or remove
   {
-    id: "e-001",
-    slug: "ke-100-particle-counter",
-    name: "KE-100 激光粒子计数器",
-    categoryId: "environmental",
-    categoryName: "环境测试设备",
-    description: "手持式空气质量检测仪，用于洁净室监测。",
-    fullDescription: "KE-100 是一款六通道手持式激光粒子计数器，符合 ISO 21501-4 标准。内置大容量数据存储，支持 USB 数据导出，是 HVAC 系统检查和室内空气质量 (IAQ) 评估的得力助手。",
-    features: [
-      "同时监测 6 个粒径通道",
-      "流量 2.83 L/min (0.1 CFM)",
-      "内置温湿度传感器",
-      "可存储 10,000 组数据",
-    ],
-    images: [],
-    specs: {
-      "粒径通道": "0.3, 0.5, 1.0, 3.0, 5.0, 10.0 μm",
-      "光源": "长寿命激光二极管",
-      "计数效率": "50% @ 0.3μm; 100% for particles > 0.45μm",
-      "电池寿命": "10 小时",
-    },
-    downloads: [
-      { title: "KE-100 校准证书样本", url: "#", type: "PDF" },
-    ],
-  },
-  {
-    id: "e-002",
-    slug: "ke-200-thermo-hygrometer",
-    name: "KE-200 精密温湿度计",
-    categoryId: "environmental",
-    categoryName: "环境测试设备",
-    description: "快速响应，高精度温湿度测量。",
-    fullDescription: "KE-200 采用瑞士进口传感器，具有极快的响应速度和极高的稳定性。适用于实验室、仓库、博物馆等对温湿度敏感的场所。",
-    features: [
-      "露点和湿球温度计算",
-      "最大/最小/平均值保持",
-      "背光显示",
-    ],
-    images: [],
-    specs: {
-      "温度范围": "-20°C ~ 60°C",
-      "湿度范围": "0 ~ 100% RH",
-      "温度精度": "±0.5°C",
-      "湿度精度": "±2.5% RH",
-    },
+    id: "m-001",
+    slug: "km-800-multimeter",
+    name: "KM-800 工业级真有效值万用表",
+    categoryId: "services", // Temporarily assigned here or move to a general category if needed
+    categoryName: "技术服务与解决方案", // Or create a "General Instruments" category
+    description: "坚固耐用，IP67 防护，专为恶劣工业现场设计。",
+    fullDescription: "KM-800 旨在设定恶劣环境下使用的工业万用表新标准。具有 IP67 防水防尘等级，和 3 米跌落测试。",
+    features: ["真有效值", "IP67 防水", "3米防跌落"],
+    images: ["/images/placeholder-multimeter.jpg"],
+    specs: { "DC 电压": "1000V" },
     downloads: [],
   }
 ];
@@ -257,3 +198,8 @@ export function getProductsByCategory(categoryId: string): Product[] {
 export function getAllCategories(): Category[] {
   return categories;
 }
+
+export function getCategoryById(id: string): Category | undefined {
+  return categories.find((c) => c.id === id);
+}
+

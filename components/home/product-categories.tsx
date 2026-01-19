@@ -6,25 +6,25 @@ import { ArrowRight } from "lucide-react";
 // Mock Data
 const categories = [
   {
-    title: "工业传感器",
-    description: "压力、温度、流量传感器，适用于过程控制。",
-    count: "12 个系列",
-    image: "bg-neutral-200", // Placeholder for actual image
-    href: "/products/sensors",
-  },
-  {
-    title: "电力测量仪器",
-    description: "万用表、钳形表、功率分析仪。",
-    count: "8 个系列",
-    image: "bg-neutral-300",
-    href: "/products/measurement",
-  },
-  {
-    title: "环境测试设备",
-    description: "温湿度计、风速仪、粒子计数器。",
+    title: "能耗与电能质量监测",
+    description: "帮助工程师实时监测工厂与建筑的能耗状况，分析电能质量问题。",
     count: "5 个系列",
+    image: "bg-neutral-200", 
+    href: "/products/power-monitoring",
+  },
+  {
+    title: "用电检查与反窃电检测",
+    description: "专为电力稽查设计，快速识别异常用电行为，准确定位窃电点。",
+    count: "3 个系列",
+    image: "bg-neutral-300",
+    href: "/products/inspection",
+  },
+  {
+    title: "高压安全测量",
+    description: "采用先进的光电隔离技术，确保在高压环境下进行安全精准的带电测试。",
+    count: "4 个系列",
     image: "bg-neutral-200",
-    href: "/products/environmental",
+    href: "/products/hv-safe",
   },
 ];
 
