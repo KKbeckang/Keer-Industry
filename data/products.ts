@@ -11,6 +11,17 @@ export interface Category {
   image?: string;
 }
 
+export interface Service {
+  id: string;
+  name_zh: string;
+  name_en: string;
+  short_zh: string;
+  cta_zh: string;
+  categoryId: string;
+  tags_zh: string[];
+  sort: number;
+}
+
 export interface Product {
   id: string;
   sku: string;
@@ -97,6 +108,60 @@ export const categories: Category[] = [
     description: "租赁、测试、改装升级、维修快修与样机特价处理。",
     order: 50,
     hero_tags_zh: ["租赁", "维修快修", "升级改造"]
+  }
+];
+
+// Service Data
+export const services: Service[] = [
+  {
+    id: "rental",
+    name_zh: "仪器仪表租赁",
+    name_en: "Instrument Rental",
+    short_zh: "承接以上仪器仪表租赁服务。",
+    cta_zh: "咨询租赁",
+    categoryId: "services",
+    tags_zh: ["租赁", "灵活使用"],
+    sort: 10
+  },
+  {
+    id: "raw-data-testing",
+    name_zh: "原始数据测试项目",
+    name_en: "Raw Data Testing",
+    short_zh: "承接以上仪器仪表原始数据测试项目。",
+    cta_zh: "咨询测试项目",
+    categoryId: "services",
+    tags_zh: ["测试", "数据服务"],
+    sort: 20
+  },
+  {
+    id: "retrofit-upgrade",
+    name_zh: "改装升级与配件支持",
+    name_en: "Retrofit & Upgrade",
+    short_zh: "承接同类仪器仪表及配件改装升级。",
+    cta_zh: "咨询升级方案",
+    categoryId: "services",
+    tags_zh: ["升级", "改造"],
+    sort: 30
+  },
+  {
+    id: "repair",
+    name_zh: "电测仪表维修（快修）",
+    name_en": "Fast Repair Service",
+    short_zh: "承接各类电测仪表维修与快修服务。",
+    cta_zh: "申请维修",
+    categoryId: "services",
+    tags_zh: ["维修", "快修"],
+    sort: 40
+  },
+  {
+    id: "prototype-sale",
+    name_zh: "实验样机处理（特价）",
+    name_en: "Prototype Clearance (Special Offer)",
+    short_zh: "实验样机特价处理（以库存为准）。",
+    cta_zh: "查看特价",
+    categoryId: "services",
+    tags_zh: ["特价", "样机"],
+    sort: 50
   }
 ];
 
@@ -487,6 +552,10 @@ export function getProductBySlug(slug: string): Product | undefined {
 
 export function getProductsByCategory(categoryId: string): Product[] {
   return products.filter((p) => p.categoryId === categoryId);
+}
+
+export function getServices(): Service[] {
+  return services.sort((a, b) => a.sort - b.sort);
 }
 
 export function getAllCategories(): Category[] {

@@ -4,13 +4,17 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 
 // Mock Data
-import { categories } from "@/data/products";
-import { Link } from "next/link"; // Ensure Link is imported
+import { categories, Category } from "@/data/products";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 // Helper to map backend category to UI display format
 const categoryDisplayData = categories
   .sort((a, b) => a.order - b.order)
   .map(cat => ({
+    id: cat.id,
     title: cat.name_zh,
     description: cat.tagline_zh,
     count: "查看系列", // Placeholder as we don't have dynamic counts yet
