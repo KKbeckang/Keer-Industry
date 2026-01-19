@@ -37,7 +37,7 @@ export interface Product {
     cover: string | null;
     gallery: string[];
   };
-  specs_summary: Record<string, string | null>;
+  specs_summary: Record<string, string | null | undefined>;
   downloads: {
     title: string;
     url: string;
@@ -146,7 +146,7 @@ export const services: Service[] = [
   {
     id: "repair",
     name_zh: "电测仪表维修（快修）",
-    name_en": "Fast Repair Service",
+    name_en: "Fast Repair Service",
     short_zh: "承接各类电测仪表维修与快修服务。",
     cta_zh: "申请维修",
     categoryId: "services",
