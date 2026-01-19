@@ -1,10 +1,13 @@
 // Type Definition
 export interface Category {
   id: string;
-  name: string;             // Chinese Name
-  englishName: string;      // English Name
-  description: string;      // Problem-oriented description
-  keyCapabilities: string[]; // Key capability tags
+  name_zh: string;          // Chinese Name
+  name_en: string;          // English Name
+  tagline_zh: string;       // Chinese Tagline
+  tagline_en: string;       // English Tagline
+  description: string;      // Backwards compatibility (mapped from tagline_zh)
+  hero_tags_zh: string[];   // Hero tags
+  order: number;
   image?: string;
 }
 
@@ -32,39 +35,54 @@ export interface Product {
 export const categories: Category[] = [
   {
     id: "power-monitoring",
-    name: "能耗与电能质量监测",
-    englishName: "Energy & Power Monitoring",
-    description: "帮助工程师实时监测工厂与建筑的能耗状况，分析电能质量问题，提升能源效率并降低运营成本。",
-    keyCapabilities: ["谐波分析", "能效评估", "实时监测", "数据记录"],
+    name_zh: "能耗与电能质量监测",
+    name_en: "Energy & Power Monitoring",
+    tagline_zh: "面向配电与设备运行的电参量监测、能耗统计与谐波分析。",
+    tagline_en: "Power parameters, energy metering and harmonic analysis.",
+    description: "面向配电与设备运行的电参量监测、能耗统计与谐波分析。",
+    order: 10,
+    hero_tags_zh: ["谐波分析", "能耗统计", "现场诊断"]
   },
   {
-    id: "inspection",
-    name: "用电检查与反窃电检测",
-    englishName: "Inspection & Anti-theft Measurement",
-    description: "专为电力稽查设计，快速识别异常用电行为，准确定位窃电点，保障电力资产安全。",
-    keyCapabilities: ["反窃电", "高精度采样", "便携式设计", "现场取证"],
+    id: "inspection-anti-theft",
+    name_zh: "用电检查与反窃电检测",
+    name_en: "Inspection & Anti-theft Measurement",
+    tagline_zh: "用于现场巡检、计量装置测试与异常用电排查。",
+    tagline_en: "Field inspection and metering device testing.",
+    description: "用于现场巡检、计量装置测试与异常用电排查。",
+    order: 20,
+    hero_tags_zh: ["现场巡检", "计量检测", "异常排查"]
   },
   {
-    id: "hv-safe",
-    name: "高压安全测量（光电隔离技术）",
-    englishName: "High-Voltage Safe Measurement",
-    description: "采用先进的光电隔离技术，确保在高压环境下进行安全、精准的带电测试，保护人员安全。",
-    keyCapabilities: ["光电隔离", "高压安全", "带电测试", "远程遥测"],
+    id: "hv-optical-isolation",
+    name_zh: "高压安全测量（光电隔离技术）",
+    name_en: "High-Voltage Safe Measurement (Optical Isolation)",
+    tagline_zh: "支持带电测试作业，突出光电隔离的人身安全与测量可信度。",
+    tagline_en: "Live-line HV measurement enabled by optical isolation.",
+    description: "支持带电测试作业，突出光电隔离的人身安全与测量可信度。",
+    order: 30,
+    hero_tags_zh: ["光电隔离", "带电测试", "高压测量"]
   },
   {
-    id: "fault-detection",
-    name: "故障定位与无损检测",
-    englishName: "Fault Detection & Non-Destructive Testing",
-    description: "快速定位电缆及设备故障点，提供无损检测方案，缩短停机时间，维护设备健康。",
-    keyCapabilities: ["故障定位", "无损检测", "局部放电", "红外热像"],
+    id: "fault-ndt",
+    name_zh: "故障定位与无损检测",
+    name_en: "Fault Detection & Non-Destructive Testing",
+    tagline_zh: "面向电力设备隐患排查、故障探测与电缆寻踪定位。",
+    tagline_en: "Fault localization, thermal inspection and cable tracing.",
+    description: "面向电力设备隐患排查、故障探测与电缆寻踪定位。",
+    order: 40,
+    hero_tags_zh: ["故障探测", "热成像", "电缆寻踪"]
   },
   {
     id: "services",
-    name: "技术服务与解决方案",
-    englishName: "Services & Solutions",
-    description: "提供从选型咨询、系统集成到售后维护的一站式专业技术服务。",
-    keyCapabilities: ["系统集成", "定制开发", "现场服务", "培训咨询"],
-  },
+    name_zh: "技术服务与解决方案",
+    name_en: "Services & Solutions",
+    tagline_zh: "租赁、测试、改装升级、维修快修与样机特价处理。",
+    tagline_en: "Rental, testing, retrofit/upgrade and repair services.",
+    description: "租赁、测试、改装升级、维修快修与样机特价处理。",
+    order: 50,
+    hero_tags_zh: ["租赁", "维修快修", "升级改造"]
+  }
 ];
 
 // Products Data (Sampled & Mapped)
@@ -99,7 +117,7 @@ export const products: Product[] = [
     id: "ins-001",
     slug: "ki-500-inspection-tool",
     name: "KI-500 用电稽查仪",
-    categoryId: "inspection",
+    categoryId: "inspection-anti-theft",
     categoryName: "用电检查与反窃电检测",
     description: "手持式多功能用电检查终端，支持多种窃电模式识别。",
     fullDescription: "KI-500 专为反窃电工作设计，能够实时分析计量回路的电压、电流、相位及波形，内置多种窃电模型算法，自动报警异常情况。",
@@ -125,7 +143,7 @@ export const products: Product[] = [
     id: "hv-001",
     slug: "khv-2000-optical-probe",
     name: "KHV-2000 光电隔离高压探头",
-    categoryId: "hv-safe",
+    categoryId: "hv-optical-isolation",
     categoryName: "高压安全测量",
     description: "利用光纤传输信号，实现高低压完全隔离。",
     fullDescription: "KHV-2000 采用光纤传输技术，将高压侧的测量信号通过光纤传输至低压侧显示仪表，彻底解决了高压测量的绝缘与干扰问题，保障操作人员绝对安全。",
@@ -151,7 +169,7 @@ export const products: Product[] = [
     id: "fd-001",
     slug: "kfd-800-cable-locator",
     name: "KFD-800 智能电缆故障定位仪",
-    categoryId: "fault-detection",
+    categoryId: "fault-ndt",
     categoryName: "故障定位与无损检测",
     description: "集测距、定点、路径探测于一体的综合电缆故障测试系统。",
     fullDescription: "KFD-800 采用多次脉冲法技术，自动分析故障距离，配合高灵敏度定点仪，可快速精确定位高阻、低阻及闪络性故障。",
@@ -196,7 +214,7 @@ export function getProductsByCategory(categoryId: string): Product[] {
 }
 
 export function getAllCategories(): Category[] {
-  return categories;
+  return categories.sort((a, b) => a.order - b.order);
 }
 
 export function getCategoryById(id: string): Category | undefined {

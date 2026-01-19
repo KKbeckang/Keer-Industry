@@ -4,29 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 
 // Mock Data
-const categories = [
-  {
-    title: "能耗与电能质量监测",
-    description: "帮助工程师实时监测工厂与建筑的能耗状况，分析电能质量问题。",
-    count: "5 个系列",
-    image: "bg-neutral-200", 
-    href: "/products/power-monitoring",
-  },
-  {
-    title: "用电检查与反窃电检测",
-    description: "专为电力稽查设计，快速识别异常用电行为，准确定位窃电点。",
-    count: "3 个系列",
-    image: "bg-neutral-300",
-    href: "/products/inspection",
-  },
-  {
-    title: "高压安全测量",
-    description: "采用先进的光电隔离技术，确保在高压环境下进行安全精准的带电测试。",
-    count: "4 个系列",
-    image: "bg-neutral-200",
-    href: "/products/hv-safe",
-  },
-];
+import { categories } from "@/data/products";
+import { Link } from "next/link"; // Ensure Link is imported
+
+// Helper to map backend category to UI display format
+const categoryDisplayData = categories
+  .sort((a, b) => a.order - b.order)
+  .map(cat => ({
+    title: cat.name_zh,
+    description: cat.tagline_zh,
+    count: "查看系列", // Placeholder as we don't have dynamic counts yet
+    image: "bg-neutral-200", // Placeholder
+    href: `/products/${cat.id}`,
+  }));
 
 export function ProductCategories() {
   return (
@@ -43,7 +33,7 @@ export function ProductCategories() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {categories.map((cat, index) => (
+          {categoryDisplayData.map((cat, index) => (
             <Link key={index} href={cat.href} className="group">
               <Card className="h-full overflow-hidden border-neutral-200 hover:border-primary transition-colors duration-300">
                 <div className={`h-48 ${cat.image} flex items-center justify-center text-neutral-400 group-hover:scale-105 transition-transform duration-500`}>
