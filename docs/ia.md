@@ -3,22 +3,22 @@
 ## 1. Site Map (Navigation)
 
 ### Top Navigation (Header)
-- **Home**
-- **Products**
-  - [Product Category 1]
-  - [Product Category 2]
-- **Solutions/Applications** (Optional)
-- **Support / Downloads**
-- **About Us**
-- **Contact Us**
-- **Search Bar**
-- **Language Switcher**
+- **首页 (Home)**
+- **产品中心 (Products)**
+  - [产品分类 1]
+  - [产品分类 2]
+- **解决方案 (Solutions)** (可选)
+- **服务支持 (Support)**
+- **关于我们 (About Us)**
+- **联系我们 (Contact Us)**
+- **搜索 (Search)**
+- **语言切换 (EN/CN)**
 
 ### Footer
-- **Quick Links:** Products, About, Contact, News
-- **Legal:** Privacy Policy, Terms of Use
-- **Social Media:** LinkedIn, YouTube, WeChat (if applicable)
-- **Address & Copyright**
+- **快速链接:** 产品中心, 关于我们, 联系我们, 新闻动态
+- **法律条款:** 隐私政策, 使用条款
+- **社交媒体:** 微信公众号, 抖音, LinkedIn
+- **联系信息 & 版权所有**
 
 ---
 

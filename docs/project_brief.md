@@ -5,8 +5,8 @@
 > **Note to User:** Please review and update the following sections with your specific requirements.
 
 ### Target Audience
-- **Primary:** Engineers (Technical specifications, reliability, data sheets)
-- **Secondary:** Procurement Officers (Pricing, availability, company certification)
+- **Primary:** Chinese Engineers & Procurement Officers (Similar to Fluke china users)
+- **Secondary:** International users (English)
 - **Type:** Mixed (Technical & Commercial)
 
 ### Product Strategy
@@ -26,8 +26,9 @@
   - Inquiry/Quote Request Form (No direct e-commerce checkout initially)
 
 ### Language & Localization
-- **Primary:** English
-- **Future/Secondary:** Chinese (Structure should support i18n)
+- **Primary:** Chinese (Simplified)
+- **Future/Secondary:** English
+
 
 ---
 
