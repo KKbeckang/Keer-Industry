@@ -1,8 +1,3 @@
-import Link from "next/link";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
-
 // Mock Data
 import { categories, Category } from "@/data/products";
 import Link from "next/link";
